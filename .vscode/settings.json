@@ -1,3 +1,7 @@
 {
-  "editor.formatOnSave": true
+  // IDE Config
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "explorer.compactFolders": false
 }
