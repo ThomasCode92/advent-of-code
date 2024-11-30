@@ -3,5 +3,10 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.tabSize": 2,
   "editor.formatOnSave": true,
-  "explorer.compactFolders": false
+  "explorer.compactFolders": false,
+
+  // Extensions Config
+  "material-icon-theme.files.associations": {
+    ".tool-versions": "settings"
+  }
 }
