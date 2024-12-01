@@ -29,6 +29,17 @@ def solve_puzzle_1(list_1, list_2):
     return sum
 
 
+def solve_puzzle_2(list_1, list_2):
+    sum = 0
+
+    for i in range(len(list_1)):
+        num = list_1[i]
+        count = list_2.count(num)
+        sum += (count * int(list_1[i]))
+
+    return sum
+
+
 if __name__ == "__main__":
     from sys import stdin
 
@@ -36,5 +47,7 @@ if __name__ == "__main__":
     data = parse_input(input)
 
     result_1 = solve_puzzle_1(*data)
+    result_2 = solve_puzzle_2(*data)
 
     print("result for puzzle 1:", result_1)
+    print("result for puzzle 2:", result_2)
