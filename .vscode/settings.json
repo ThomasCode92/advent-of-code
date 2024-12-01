@@ -8,5 +8,10 @@
   // Extensions Config
   "material-icon-theme.files.associations": {
     ".tool-versions": "settings"
+  },
+
+  // Language Config
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.autopep8"
   }
 }
