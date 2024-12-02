@@ -23,6 +23,20 @@ def solve_puzzle_1(reports):
     return safe
 
 
+def solve_puzzle_2(reports):
+    safe = 0
+    for report in reports:
+        if is_safe(report):
+            safe += 1
+        else:
+            for i in range(len(report)):
+                tolerated_report = report[:i] + report[i + 1:]
+                if is_safe(tolerated_report):
+                    safe += 1
+                    break
+    return safe
+
+
 if __name__ == "__main__":
     from sys import stdin
 
@@ -30,5 +44,7 @@ if __name__ == "__main__":
     data = parse_input(input)
 
     result_1 = solve_puzzle_1(data)
+    result_2 = solve_puzzle_2(data)
 
     print("result for puzzle 1:", result_1)
+    print("result for puzzle 2:", result_2)
