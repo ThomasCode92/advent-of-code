@@ -6,13 +6,19 @@
   "explorer.compactFolders": false,
 
   // Extensions Config
+  "cSpell.ignoreWords": ["popleft"],
   "material-icon-theme.files.associations": {
     ".tool-versions": "settings"
   },
 
-  // Language Config
+  // IDE Config for Python Files
   "[python]": {
     "editor.defaultFormatter": "ms-python.autopep8",
     "editor.tabSize": 4
-  }
+  },
+
+  // Python Config
+  "python.analysis.inlayHints.functionReturnTypes": true,
+  "python.analysis.inlayHints.callArgumentNames": "all",
+  "python.analysis.inlayHints.variableTypes": true
 }
