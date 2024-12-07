@@ -18,28 +18,37 @@ def evaluate_expression(numbers, operators):
             result += numbers[i + 1]
         elif op == "*":
             result *= numbers[i + 1]
+        elif op == "|":
+            # Concatenate the digits of the two numbers
+            result = int(str(result) + str(numbers[i + 1]))
     return result
 
 
-def solve_puzzle_1(test_values, calibrations):
+def solve_calibration(test_values, calibrations, operators="+*"):
     """Finds which equations can be true and calculates the total calibration result."""
     total_calibration = 0
-
     for i, calibration in enumerate(calibrations):
         test_value = test_values[i]
         n = len(calibration) - 1  # Number of operator slots
         possible = False
 
-        # Try all combinations of + and * operators
-        for operators in product("+*", repeat=n):
-            if evaluate_expression(calibration, operators) == test_value:
+        # Try all combinations
+        for op in product(operators, repeat=n):
+            if evaluate_expression(calibration, op) == test_value:
                 possible = True
                 break
 
         if possible:
             total_calibration += test_value
-
     return total_calibration
+
+
+def solve_puzzle_1(test_values, calibrations):
+    return solve_calibration(test_values, calibrations)
+
+
+def solve_puzzle_2(test_values, calibrations):
+    return solve_calibration(test_values, calibrations, "+*|")
 
 
 if __name__ == "__main__":
@@ -49,5 +58,7 @@ if __name__ == "__main__":
     data = parse_input(input)
 
     result_1 = solve_puzzle_1(*data)
+    result_2 = solve_puzzle_2(*data)
 
     print("result for puzzle 1:", result_1)
+    print("result for puzzle 2:", result_2)
