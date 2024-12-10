@@ -29,6 +29,16 @@ def solve_puzzle_1(map, rows, cols):
     return num
 
 
+def solve_puzzle_2(map, rows, cols):
+    num = 0
+    for y in range(rows):
+        for x in range(cols):
+            if map[y][x] == 0:
+                dest = find_dest(map, y, x, rows, cols)
+                num += len(dest)
+    return num
+
+
 if __name__ == "__main__":
     from sys import stdin
 
@@ -36,5 +46,7 @@ if __name__ == "__main__":
     data = parse_input(input)
 
     result_1 = solve_puzzle_1(*data)
+    result_2 = solve_puzzle_2(*data)
 
     print("result for puzzle 1:", result_1)
+    print("result for puzzle 2:", result_2)
