@@ -1,3 +1,6 @@
+from collections import Counter
+
+
 def parse_input(input):
     return input.split(" ")
 
@@ -32,6 +35,19 @@ def solve_puzzle_1(data):
     return len(flatten_list(stones))
 
 
+def solve_puzzle_2(data):
+    stone_counts = Counter(int(number) for number in data)
+
+    for _ in range(75):
+        new_stone_counts = Counter()
+        for stone, count in stone_counts.items():
+            for new_stone in transform_stone(stone):
+                new_stone_counts[new_stone] += count
+        stone_counts = new_stone_counts
+
+    return sum(stone_counts.values())
+
+
 if __name__ == "__main__":
     from sys import stdin
 
@@ -39,5 +55,7 @@ if __name__ == "__main__":
     data = parse_input(input)
 
     result_1 = solve_puzzle_1(data)
+    result_2 = solve_puzzle_2(data)
 
     print("result for puzzle 1:", result_1)
+    print("result for puzzle 2:", result_2)
