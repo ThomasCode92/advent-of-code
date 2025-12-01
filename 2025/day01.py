@@ -18,7 +18,7 @@ def solve_puzzle_1(rotations):
     count_zeros = 0
 
     for direction, distance in rotations:
-        if direction == 'L':
+        if direction == "L":
             # Left moves toward lower numbers (subtract)
             position = (position - distance) % 100
         else:  # direction == 'R'
@@ -32,8 +32,31 @@ def solve_puzzle_1(rotations):
 
 
 def solve_puzzle_2(rotations):
-    # TODO: Implement solution for puzzle 2
-    return 0
+    # Count every time any click causes the dial to point at 0
+    position = 50
+    count_zeros = 0
+
+    for direction, distance in rotations:
+        # Calculate distance to reach 0 from current position
+        if position == 0:
+            distance_to_zero = 100
+        elif direction == "L":
+            distance_to_zero = position
+        else:  # direction == "R"
+            distance_to_zero = 100 - position
+
+        # Count complete loops (every 100 clicks passes through 0)
+        hits = distance // 100
+        # Check if partial rotation reaches 0
+        if distance % 100 >= distance_to_zero:
+            hits += 1
+
+        count_zeros += hits
+        position = (
+            position - distance if direction == "L" else position + distance
+        ) % 100
+
+    return count_zeros
 
 
 if __name__ == "__main__":
