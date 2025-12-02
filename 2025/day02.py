@@ -11,28 +11,37 @@ def parse_input(input):
     return ranges
 
 
-def is_invalid_id(num):
-    # Invalid ID: a sequence of digits repeated exactly twice (e.g., 55, 6464, 123123)
+def is_invalid_id(num, exact=False):
+    # Invalid ID: a sequence of digits repeated at least twice
     # No leading zeroes (so 0101 is not valid, but 101 is)
-    # Regex: ^([1-9]\d*)\1$ matches a non-zero starting sequence repeated exactly once
-    return bool(re.match(r"^([1-9]\d*)\1$", str(num)))
+    # exact=True (exactly twice): ^([1-9]\d*)\1$
+    # exact=False (at least twice): ^([1-9]\d*)\1+$
+    pattern = r"^([1-9]\d*)\1$" if exact else r"^([1-9]\d*)\1+$"
+    return bool(re.match(pattern, str(num)))
 
 
 def solve_puzzle_1(ranges):
-    # Find all invalid IDs in the given ranges and sum them
+    # Find all invalid IDs (repeated exactly twice) in the given ranges and sum them
     total = 0
 
     for start, end in ranges:
         for num in range(start, end + 1):
-            if is_invalid_id(num):
+            if is_invalid_id(num, exact=True):
                 total += num
 
     return total
 
 
-def solve_puzzle_2(data):
-    # TODO: Solve puzzle 2
-    pass
+def solve_puzzle_2(ranges):
+    # Find all invalid IDs (repeated at least twice) and sum them
+    total = 0
+
+    for start, end in ranges:
+        for num in range(start, end + 1):
+            if is_invalid_id(num, exact=False):
+                total += num
+
+    return total
 
 
 if __name__ == "__main__":
