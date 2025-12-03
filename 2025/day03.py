@@ -7,8 +7,11 @@ def parse_input(input):
 
 
 def solve_puzzle_1(banks):
-    # For each bank, find the largest two-digit number by choosing exactly two batteries
-    # Batteries maintain their order (cannot rearrange)
+    """
+    For each bank, find the largest two-digit number by choosing exactly two batteries
+    Batteries maintain their order (cannot rearrange)
+    """
+
     total = 0
 
     for bank in banks:
@@ -24,9 +27,43 @@ def solve_puzzle_1(banks):
     return total
 
 
-def solve_puzzle_2(data):
-    # TODO: Implement puzzle 2 solution
-    pass
+def solve_puzzle_2(banks):
+    """
+    For each bank, find the largest 12-digit number by choosing exactly 12 batteries
+    Strategy: Greedily select batteries to maximize value at each position
+    At each position, choose the largest available digit that still allows us to select enough remaining batteries
+    """
+
+    total = 0
+
+    for bank in banks:
+        n = len(bank)
+        batteries_needed = 12
+        selected = []
+        i = 0
+
+        # Greedily select the largest digit at each step
+        while len(selected) < batteries_needed:
+            # How many more batteries do we need after this one?
+            remaining_needed = batteries_needed - len(selected) - 1
+            # How far ahead can we look? We need to leave enough batteries for the rest
+            max_index = n - remaining_needed
+
+            # Find the largest digit in the range [i, max_index)
+            best_digit = "0"
+            best_index = i
+            for j in range(i, max_index):
+                if bank[j] > best_digit:
+                    best_digit = bank[j]
+                    best_index = j
+
+            selected.append(best_digit)
+            i = best_index + 1
+
+        joltage = int("".join(selected))
+        total += joltage
+
+    return total
 
 
 if __name__ == "__main__":
