@@ -49,9 +49,33 @@ def solve_puzzle_1(ranges, available_ids):
 
 def solve_puzzle_2(ranges, available_ids):
     """
-    Placeholder for puzzle 2 - will be revealed after solving puzzle 1
+    Count total number of unique ingredient IDs considered fresh by the ranges
+    Ranges can overlap, so we need to merge them to avoid double counting
+    For example: ranges 3-5, 10-14, 16-20, 12-18
+    Covers: 3,4,5,10,11,12,13,14,15,16,17,18,19,20 = 14 IDs
     """
-    return 0
+
+    # Sort ranges by start position
+    sorted_ranges = sorted(ranges)
+
+    # Merge overlapping ranges
+    merged_ranges = [sorted_ranges[0]]
+    for start, end in sorted_ranges[1:]:
+        last_start, last_end = merged_ranges[-1]
+
+        # If current range overlaps or is adjacent to last range, merge them
+        if start <= last_end + 1:
+            merged_ranges[-1] = (last_start, max(last_end, end))
+        else:
+            # No overlap, add as new range
+            merged_ranges.append((start, end))
+
+    # Count total IDs in merged ranges
+    total_ids = 0
+    for start, end in merged_ranges:
+        total_ids += end - start + 1
+
+    return total_ids
 
 
 if __name__ == "__main__":
