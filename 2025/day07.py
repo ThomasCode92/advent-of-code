@@ -22,29 +22,28 @@ def parse_input(input):
             start_col = c
             break
 
-    return {
-        'grid': grid,
-        'start_col': start_col,
-        'rows': rows,
-        'cols': cols
-    }
+    return {"grid": grid, "start_col": start_col, "rows": rows, "cols": cols}
 
 
-def simulate_beams(grid, start_col, rows, cols):
+def simulate_beams(grid, start_col, rows, cols, track_unique_splits=False):
     """
     Simulate tachyon beams using an array approach
-    Array tracks number of beams at each column position
-    Returns the total number of splits that occurred
+    Array tracks number of beams/timelines at each column position
 
-    A split occurs when a splitter is first encountered.
-    Multiple beams hitting the same splitter don't create additional splits.
+    If track_unique_splits=True (puzzle 1):
+        - Only counts each splitter once (first encounter)
+        - Returns the number of unique splitters hit
+
+    If track_unique_splits=False (puzzle 2):
+        - Each beam hitting a splitter creates two timelines
+        - Returns the total number of timelines at the end
     """
     # Initialize beam array - one beam at starting column
     beams = [0] * cols
     beams[start_col] = 1
 
     split_count = 0
-    split_positions = set()  # Track which splitters have been hit
+    split_positions = set()
 
     # Move the beam array down row by row
     for row in range(rows - 1):  # Stop before last row since beams exit
@@ -59,8 +58,9 @@ def simulate_beams(grid, start_col, rows, cols):
 
             # Check what's at the next position
             if grid[next_row][col] == "^":
-                # Hit a splitter - only count if first time
-                if (next_row, col) not in split_positions:
+                # Hit a splitter
+                if track_unique_splits and (next_row, col) not in split_positions:
+                    # Puzzle 1: only count if first time
                     split_positions.add((next_row, col))
                     split_count += 1
 
@@ -77,26 +77,28 @@ def simulate_beams(grid, start_col, rows, cols):
 
         beams = next_beams
 
-        # Stop if no more beams
-        if all(b == 0 for b in beams):
-            break
-
-    return split_count
+    # Return result based on mode
+    if track_unique_splits:
+        return split_count
+    else:
+        return sum(beams)
 
 
 def solve_puzzle_1(grid, start_col, rows, cols):
     """
     Count how many times the tachyon beam is split
     A beam splits when it hits a splitter ('^'), creating two new beams
+    Only counts each splitter once (first encounter)
     """
-    return simulate_beams(grid, start_col, rows, cols)
+    return simulate_beams(grid, start_col, rows, cols, track_unique_splits=True)
 
 
 def solve_puzzle_2(grid, start_col, rows, cols):
     """
-    Placeholder for puzzle 2 - will be revealed after puzzle 1 is solved
+    Count the number of unique timelines using many-worlds interpretation
+    Each time a particle hits a splitter, it creates two timelines (left and right)
     """
-    return 0
+    return simulate_beams(grid, start_col, rows, cols, track_unique_splits=False)
 
 
 if __name__ == "__main__":
