@@ -75,6 +75,21 @@ def calculate_distance(box1, box2):
     return ((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2) ** 0.5
 
 
+def calculate_sorted_distances(boxes):
+    """
+    Calculate all pairwise distances and sort by distance (shortest first)
+    Returns list of (distance, box_i_index, box_j_index) tuples
+    """
+    n = len(boxes)
+    distances = []
+    for i in range(n):
+        for j in range(i + 1, n):
+            dist = calculate_distance(boxes[i], boxes[j])
+            distances.append((dist, i, j))
+    distances.sort()
+    return distances
+
+
 def solve_puzzle_1(boxes, num_attempts=1000):
     """
     Connect the closest pairs of junction boxes using a greedy algorithm
@@ -92,16 +107,7 @@ def solve_puzzle_1(boxes, num_attempts=1000):
     of successful connections. Some attempts may fail if boxes are already connected.
     """
     n = len(boxes)
-
-    # Calculate all pairwise distances with box indices
-    distances = []
-    for i in range(n):
-        for j in range(i + 1, n):
-            dist = calculate_distance(boxes[i], boxes[j])
-            distances.append((dist, i, j))
-
-    # Sort by distance (shortest first)
-    distances.sort()
+    distances = calculate_sorted_distances(boxes)
 
     # Use Union-Find to track circuits
     uf = UnionFind(n)
@@ -129,9 +135,32 @@ def solve_puzzle_1(boxes, num_attempts=1000):
 
 def solve_puzzle_2(boxes):
     """
-    Part 2 not yet available
+    Connect junction boxes until they all form a single circuit
+    Returns the product of X coordinates of the last connection made
+
+    Algorithm:
+    1. Calculate all pairwise distances (same as Part 1)
+    2. Sort pairs by distance (shortest first)
+    3. Use Union-Find to track circuits
+    4. Keep connecting pairs until only 1 circuit remains
+    5. Return X1 * X2 of the final connection
     """
-    return None
+    n = len(boxes)
+    distances = calculate_sorted_distances(boxes)
+
+    # Use Union-Find to track circuits
+    uf = UnionFind(n)
+    num_circuits = n  # Initially, each box is its own circuit
+
+    # Connect pairs until all boxes are in one circuit
+    for dist, i, j in distances:
+        if uf.union(i, j):  # Successfully connected different circuits
+            num_circuits -= 1
+            if num_circuits == 1:  # All boxes now in one circuit!
+                # Return product of X coordinates of this final connection
+                return boxes[i][0] * boxes[j][0]
+
+    return None  # Should never reach here if input is valid
 
 
 if __name__ == "__main__":
